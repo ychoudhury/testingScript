@@ -19,4 +19,5 @@ for i in range(2, sheet.max_row):
         print(i+1, next)
         
 cycleTimes.append(sheet.cell(row=sheet.max_row, column=2).value)        
-print(cycleTimes)
+for i in cycleTimes:
+    print(i)
