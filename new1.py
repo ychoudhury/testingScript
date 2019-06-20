@@ -12,7 +12,7 @@ wb = openpyxl.load_workbook('ngt_log.xlsx')
 sheet = wb['sheet1'] # name of the sheet that is being analyzed
 cycleTimes = []
 coulCount = []
-cycleTimes.append(sheet.cell(row=2, column=2).value.time())
+cycleTimes.append(sheet.cell(row=2, column=2).value.time()) # adds 00:00:00 as start time
 coulCount.append(sheet.cell(row=2, column=8).value)
 
 print("ROW | VALUE")
@@ -22,7 +22,6 @@ for i in range(2, sheet.max_row):
     if int(current) >= 0 and int(next) <= 0 or int(current) <= 0 and int(next) >= 0:
         cycleTimes.append(sheet.cell(row=i, column=2).value)
         cycleTimes.append(sheet.cell(row=(i+1), column=2).value)
-        
         coulCount.append(sheet.cell(row=i, column=8).value)
         coulCount.append(sheet.cell(row=(i+1), column=8).value)
         print(i+1, next)
@@ -40,8 +39,5 @@ print("\nCOLOUMB COUNT")
 coulCount.append(sheet.cell(row=sheet.max_row, column=8).value)
 for i in coulCount:
     print(i)
-
-
-#wb.create_sheet('test1')
-#wb.save('ngt_log.xlsx')
-
+    
+# input() #keeps cmd window open after script execution
