@@ -3,15 +3,17 @@
 
 import os
 import openpyxl
-from openpyxl.chart import LineChart, Reference
-from openpyxl import load_workbook
-
+import datetime
+from datetime import datetime, date
 
 os.chdir('C:\\Users\yasirc\Desktop\parseData') # enter correct filepath for project here
 wb = openpyxl.load_workbook('ngt_log.xlsx')
 sheet = wb['sheet1'] # name of the sheet that is being analyzed
 cycleTimes = []
 coulCount = []
+dateTimes = []
+timeDeltas = []
+
 cycleTimes.append(sheet.cell(row=2, column=2).value.time()) # adds 00:00:00 as start time
 coulCount.append(sheet.cell(row=2, column=8).value)
 
@@ -30,14 +32,28 @@ print("\nTIMES")
 cycleTimes.append(sheet.cell(row=sheet.max_row, column=2).value)        
 for i in cycleTimes:
     print(i)
+    dateTimes.append(datetime.combine(date.today(), i))
 
 print("\nTIMES BETWEEN CYCLES")
-for i in cycleTimes:
-    print
 
 print("\nCOLOUMB COUNT")
 coulCount.append(sheet.cell(row=sheet.max_row, column=8).value)
 for i in coulCount:
     print(i)
-    
+
+for i in dateTimes:
+    print(i)
+
+
 # input() #keeps cmd window open after script execution
+
+'''
+refObj = openpyxl.chart.Reference(sheet, min_col=2, min_row=2, max_col=2, max_row=sheet.max_row)
+seriesObj = openpyxl.chart.Series(refObj, title='First series')
+chartObj = openpyxl.chart.LineChart()
+chartObj.title = 'My Chart'
+chartObj.append(seriesObj)
+sheet.add_chart(chartObj, 'C5')
+wb.save('sampleChart.xlsx')
+
+'''
