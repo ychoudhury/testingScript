@@ -4,15 +4,16 @@
 import os
 import openpyxl
 import datetime
-from datetime import datetime, date
+from datetime import date, datetime, timedelta
 
 os.chdir('C:\\Users\yasirc\Desktop\parseData') # enter correct filepath for project here
-wb = openpyxl.load_workbook('ngt_log.xlsx')
+wb = openpyxl.load_workbook('ngt_log.xlsx') # filename being analyzed
 sheet = wb['sheet1'] # name of the sheet that is being analyzed
 cycleTimes = []
 coulCount = []
 dateTimes = []
 timeDeltas = []
+res = []
 
 cycleTimes.append(sheet.cell(row=2, column=2).value.time()) # adds 00:00:00 as start time
 coulCount.append(sheet.cell(row=2, column=8).value)
@@ -40,10 +41,6 @@ print("\nCOLOUMB COUNT")
 coulCount.append(sheet.cell(row=sheet.max_row, column=8).value)
 for i in coulCount:
     print(i)
-
-for i in dateTimes:
-    print(i)
-
 
 # input() #keeps cmd window open after script execution
 
