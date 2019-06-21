@@ -3,7 +3,7 @@
 
 import os
 import openpyxl
-import datetime
+import re
 from datetime import date, datetime, timedelta
 
 os.chdir('C:\\Users\yasirc\Desktop\parseData') # enter correct filepath for project here
@@ -54,28 +54,30 @@ capChange = [end - start for start, end in zip(starts, ends)]
 for i in capChange:
     print(i)
 
+sheet['B2'] = sheet.cell(row=2, column=2).value.time()
+
 wb.create_sheet('sheet2') # insert at the end (default)
 ws1 = wb.active
-ws2 = wb['sheet2'] # name of the sheet that is being analyzed
-    
+ws2 = wb['sheet2']
 for cell in ws1['B:B']:
-    print('Printing from ' + str(cell.column) + str(cell.row))
-    ws2.cell(row = cell.row, column = 2, value = cell.value)
+#    print('Printing from column ' + str(cell.column) + ' row ' + str(cell.row))
+    ws2.cell(row = cell.row, column = 1, value = cell.value)
 
-sheet['B2'] = 0 # restores corrupted value of cell B2 from ######
-sheet = wb['sheet2']
-sheet['B2'] = 0 # restores corrupted value of cell B2 from ######
+for cell in ws1['D:D']:
+#    print('Printing from column ' + str(cell.column) + ' row ' + str(cell.row))
+    ws2.cell(row = cell.row, column = 2, value = cell.value)   
 
-wb.save('ngt_log.xlsx')
-# input() #keeps cmd window open after script execution
+print('Creating charts...')
 
-'''
-refObj = openpyxl.chart.Reference(sheet, min_col=2, min_row=2, max_col=2, max_row=sheet.max_row)
-seriesObj = openpyxl.chart.Series(refObj, title='First series')
+sheet = wb['sheet2'] # focus on sheet2 to pull data from/write chart to
+refObj = openpyxl.chart.Reference(sheet, min_col=1, min_row=3, max_col=2, max_row=sheet.max_row)
+seriesObj = openpyxl.chart.Series(refObj, title='Series1')
 chartObj = openpyxl.chart.LineChart()
-chartObj.title = 'My Chart'
+chartObj.title = 'SLA Discharge - 5.5A: V_BAT'
 chartObj.append(seriesObj)
 sheet.add_chart(chartObj, 'C5')
-sheet['B2'] = 0 # restores corrupted value of cell B2 from ######
-wb.save('sampleChart.xlsx')
-'''
+wb.save('ngt_log.xlsx')
+
+
+
+# input() #keeps cmd window open after script execution
