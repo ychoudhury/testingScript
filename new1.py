@@ -6,7 +6,7 @@ import openpyxl
 import datetime
 from datetime import date, datetime, timedelta
 
-os.chdir('C:\\Users\Yasir\Desktop\parseData') # enter correct filepath for project here
+os.chdir('C:\\Users\yasirc\Desktop\parseData') # enter correct filepath for project here
 wb = openpyxl.load_workbook('ngt_log.xlsx') # filename being analyzed
 sheet = wb['sheet1'] # name of the sheet that is being analyzed
 cycleTimes = []
@@ -53,20 +53,19 @@ ends = coulCount[1::2]
 capChange = [end - start for start, end in zip(starts, ends)]
 for i in capChange:
     print(i)
-
-
-
-
-
+    
+#wb.create_sheet('sheet2') # insert at the end (default)
+sheet['B2'] = 0
+#wb.save('ngt_log.xlsx')
 # input() #keeps cmd window open after script execution
 
-'''
+
 refObj = openpyxl.chart.Reference(sheet, min_col=2, min_row=2, max_col=2, max_row=sheet.max_row)
 seriesObj = openpyxl.chart.Series(refObj, title='First series')
 chartObj = openpyxl.chart.LineChart()
 chartObj.title = 'My Chart'
 chartObj.append(seriesObj)
 sheet.add_chart(chartObj, 'C5')
+sheet['B2'] = 0 # restores corrupted value of cell B2 from ######
 wb.save('sampleChart.xlsx')
 
-'''
