@@ -6,16 +6,23 @@ import openpyxl
 import re
 from datetime import date, datetime, timedelta
 
-os.chdir('C:\\Users\yasirc\Desktop\parseData') # enter correct filepath for project here
-wb = openpyxl.load_workbook('ngt_log.xlsx') # filename being analyzed
-sheet = wb['sheet1'] # name of the sheet that is being analyzed
+# enter correct filepath for project here
+os.chdir('C:\\Users\yasirc\Desktop\parseData')
+
+# enter correct filename here
+wb = openpyxl.load_workbook('ngt_log.xlsx')
+
+# name of the sheet that is being analyzed
+sheet = wb['sheet1']
+
 cycleTimes = []
 coulCount = []
 capChange = []
 dateTimes = []
 timeDeltas = []
 
-cycleTimes.append(sheet.cell(row=2, column=2).value.time()) # adds 00:00:00 as start time
+# first value added to array for time calculation purposes    
+cycleTimes.append(sheet.cell(row=2, column=2).value.time())
 coulCount.append(sheet.cell(row=2, column=8).value)
 
 print("ROW | VALUE")
@@ -56,8 +63,9 @@ for i in capChange:
 
 sheet['B2'] = sheet.cell(row=2, column=2).value.time()
 
+'''
+
 wb.create_sheet('sheet2') # insert at the end (default)
-ws1 = wb.active
 ws2 = wb['sheet2']
 for cell in ws1['B:B']:
 #    print('Printing from column ' + str(cell.column) + ' row ' + str(cell.row))
@@ -66,6 +74,8 @@ for cell in ws1['B:B']:
 for cell in ws1['D:D']:
 #    print('Printing from column ' + str(cell.column) + ' row ' + str(cell.row))
     ws2.cell(row = cell.row, column = 2, value = cell.value)   
+
+
 
 print('Creating charts...')
 
@@ -77,7 +87,7 @@ chartObj.title = 'SLA Discharge - 5.5A: V_BAT'
 chartObj.append(seriesObj)
 sheet.add_chart(chartObj, 'C5')
 wb.save('ngt_log.xlsx')
-
+'''
 
 
 # input() #keeps cmd window open after script execution
