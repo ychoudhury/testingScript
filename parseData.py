@@ -1,6 +1,5 @@
 #TODO: File location naming
 #TODO: Sheet naming
-#TODO: Graph x axis
 #TODO: Graphs for each cycle
 
 import os
@@ -27,7 +26,7 @@ dateTimes = []
 timeDeltas = []
 graphIntervals = []
 
-# RegEx to convert times to consistent format
+# RegEx to convert times in column B to a consistent format
 def cell_to_datetime(cell):
     if isinstance(cell.value, datetime):
         return datetime.combine(date.today(), cell.value.time())
@@ -50,6 +49,7 @@ def cell_to_datetime(cell):
     return adjusted_datetime
 
 # first value added to array for time calculation purposes
+graphIntervals.append(sheet.cell(row=2, column=1).value)
 cycleTimes.append(cell_to_datetime(sheet.cell(row=2, column=2)))
 coulCount.append(sheet.cell(row=2, column=8).value)
 
@@ -91,6 +91,12 @@ capChange = [end - start for start, end in zip(starts, ends)]
 for i in capChange:
     print(i)
 
+print("\nGraph Intervals")
+for i in graphIntervals:
+    print(i)
+
+
+# Chart creation
 wb.create_sheet('sheet2') # New sheet created for data analysis
 ws1 = wb['sheet1']
 ws2 = wb['sheet2']
@@ -104,7 +110,6 @@ print('Creating charts...')
 for i in range(2, sheet.max_row):
     cell = sheet.cell(row=i, column=1)
     cell.value = str(cell_to_datetime(cell))
-
 
 c1 = LineChart()
 c1.title = "SLA Discharge - 5.5A: V_BAT"
