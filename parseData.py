@@ -119,8 +119,8 @@ vBat = chart.Reference(ws2, min_col=2, min_row=1, max_col=2, max_row=sheet.max_r
 qBat = chart.Reference(ws2, min_col=3, min_row=1, max_col=3)
 
 c1 = chart.LineChart()
-c1.title = "SLA Discharge - 5.5A: V_BAT"
-c1.style = 12
+c1.title = "SLA Discharge - 5.5A: V_BAT and Q_Count"
+#c1.style = 12
 c1.x_axis.majorTimeUnit = "days"
 c1.x_axis = chart.axis.DateAxis()
 c1.x_axis.title = "Time"
@@ -135,6 +135,7 @@ c1.y_axis.majorGridlines = None
 
 
 c2 = chart.LineChart()
+#c2.style = 12
 c2.x_axis.axId = 500 # same as c1
 c2.add_data(qBat, titles_from_data=True, from_rows=True)
 c2.set_categories(dates)
