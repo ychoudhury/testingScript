@@ -5,7 +5,7 @@
 import os
 import re
 import openpyxl
-from openpyxl import Workbook
+from openpyxl import Workbook, chart
 from openpyxl.chart import LineChart, Reference, Series
 from openpyxl.chart.axis import DateAxis
 from datetime import date, datetime, timedelta, time
@@ -92,6 +92,7 @@ for i in capChange:
     print(i)
 
 print("\nGraph Intervals")
+graphIntervals.append(sheet.cell(row=sheet.max_row, column=1).value)
 for i in graphIntervals:
     print(i)
 
@@ -104,6 +105,8 @@ for cell in ws1['B:B']:
     ws2.cell(row = cell.row, column = 1, value = cell.value)
 for cell in ws1['D:D']:
     ws2.cell(row = cell.row, column = 2, value = cell.value)
+for cell in ws1['I:I']:
+    ws2.cell(row = cell.row, column = 3, value = cell.value)
 
 sheet = wb['sheet2'] # focus on sheet2 to pull data from/write chart to    
 print('Creating charts...')
@@ -111,27 +114,46 @@ for i in range(2, sheet.max_row):
     cell = sheet.cell(row=i, column=1)
     cell.value = str(cell_to_datetime(cell))
 
-c1 = LineChart()
+dates = chart.Reference(ws2, min_col=1, min_row=2, max_row=sheet.max_row)
+vBat = chart.Reference(ws2, min_col=2, min_row=1, max_col=2, max_row=sheet.max_row)
+qBat = chart.Reference(ws2, min_col=3, min_row=1, max_col=3)
+
+c1 = chart.LineChart()
 c1.title = "SLA Discharge - 5.5A: V_BAT"
 c1.style = 12
-c1.y_axis.crossAx = 500
-c1.x_axis = DateAxis(crossAx=100)
-c1.x_axis.number_format = 'd-HH-MM-SS'
 c1.x_axis.majorTimeUnit = "days"
-
-c1.y_axis.title = "Battery Voltage"
+c1.x_axis = chart.axis.DateAxis()
 c1.x_axis.title = "Time"
-
-data = Reference(ws2, min_col=2, min_row=1, max_col=2, max_row=sheet.max_row)
-c1.add_data(data, titles_from_data=True)
-dates = Reference(ws2, min_col=1, min_row=2, max_row=sheet.max_row)
+c1.x_axis.crosses = "min"
+c1.x_axis.majorTickMark = "out"
+c1.x_axis.number_format = 'd-HH-MM-SS'
+c1.add_data(vBat, titles_from_data=True)
 c1.set_categories(dates)
+c1.y_axis.title = "Battery Voltage"
+c1.y_axis.crossAx = 500
+c1.y_axis.majorGridlines = None
+
+
+c2 = chart.LineChart()
+c2.x_axis.axId = 500 # same as c1
+c2.add_data(qBat, titles_from_data=True, from_rows=True)
+c2.set_categories(dates)
+c2.y_axis.axId = 200
+c2.y_axis.title = "Qbat Percentage"
+c2.y_axis.crossAx = 500
+
+c1.y_axis.crosses = "max"
+c1 += c2
 
 
 s1 = c1.series[0]
 s1.graphicalProperties.line.solidFill = "BE4B48"
 s1.graphicalProperties.line.width = 25000 # width in EMUs.
 s1.smooth = True # Make the line smooth
-ws2.add_chart(c1, "C5")
+s2 = c2.series[0]
+s2.graphicalProperties.line.solidFill = "48BBBE"
+s2.graphicalProperties.line.width = 25000 # width in EMUs.
+s2.smooth = True # Make the line smooth
+ws2.add_chart(c1, "D5")
 
 wb.save('ngt_log.xlsx')
