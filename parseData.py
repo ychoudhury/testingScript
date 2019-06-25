@@ -27,6 +27,7 @@ dateTimes = []
 timeDeltas = []
 graphIntervals = []
 
+# RegEx to convert times to consistent format
 def cell_to_datetime(cell):
     if isinstance(cell.value, datetime):
         return datetime.combine(date.today(), cell.value.time())
@@ -48,7 +49,7 @@ def cell_to_datetime(cell):
 
     return adjusted_datetime
 
-# first value added to array for time calculation purposes.
+# first value added to array for time calculation purposes
 cycleTimes.append(cell_to_datetime(sheet.cell(row=2, column=2)))
 coulCount.append(sheet.cell(row=2, column=8).value)
 
@@ -90,7 +91,7 @@ capChange = [end - start for start, end in zip(starts, ends)]
 for i in capChange:
     print(i)
 
-wb.create_sheet('sheet2') # insert at the end (default)
+wb.create_sheet('sheet2') # New sheet created for data analysis
 ws1 = wb['sheet1']
 ws2 = wb['sheet2']
 for cell in ws1['B:B']:
@@ -108,11 +109,19 @@ for i in range(2, sheet.max_row):
 c1 = LineChart()
 c1.title = "SLA Discharge - 5.5A: V_BAT"
 c1.style = 12
+c1.y_axis.crossAx = 500
+c1.x_axis = DateAxis(crossAx=100)
+c1.x_axis.number_format = 'd-HH-MM-SS'
+c1.x_axis.majorTimeUnit = "days"
+
 c1.y_axis.title = "Battery Voltage"
 c1.x_axis.title = "Time"
 
 data = Reference(ws2, min_col=2, min_row=1, max_col=2, max_row=sheet.max_row)
 c1.add_data(data, titles_from_data=True)
+dates = Reference(ws2, min_col=1, min_row=2, max_row=sheet.max_row)
+c1.set_categories(dates)
+
 
 s1 = c1.series[0]
 s1.graphicalProperties.line.solidFill = "BE4B48"
