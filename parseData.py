@@ -4,7 +4,6 @@
 import os
 import re
 import openpyxl
-import sys
 from openpyxl import Workbook, chart
 from openpyxl.chart import LineChart, Reference, Series
 from openpyxl.chart.axis import DateAxis
@@ -130,8 +129,8 @@ c1.y_axis.crossAx = 500
 c1.y_axis.majorGridlines = None
 
 c2 = chart.LineChart()
-c2.height = 10 # chart dimensions
-c2.width = 20
+c2.height = 15
+c2.width = 25
 c2.x_axis.axId = 500
 c2.add_data(qBat, titles_from_data=True)
 c2.y_axis.axId = 200
@@ -144,15 +143,15 @@ c1 += c2
 # Line styling
 s1 = c1.series[0]
 s1.graphicalProperties.line.solidFill = "BE4B48"
-s1.graphicalProperties.line.width = 25000 # width in EMUs.
+s1.graphicalProperties.line.width = 25000
 s1.smooth = True # make the line smooth
 s2 = c2.series[0]
 s2.graphicalProperties.line.solidFill = "4A7EBB"
-s2.graphicalProperties.line.width = 25000 # width in EMUs.
+s2.graphicalProperties.line.width = 25000
 s2.smooth = True # make the line smooth
 
 
-ws2.add_chart(c1, "P5")
+ws2.add_chart(c1, "P5") # positioning of large chart
 
 chart_row = 5
 
@@ -163,9 +162,6 @@ for i in range(0, len(graphIntervals), 2):
 	# skip headers on first row
 	if min_row == 1:
 		min_row = 2
-
-	#print('min: %d' % (min_row))
-	#print('max: %d' % (max_row))
 
 	dates = chart.Reference(ws2, min_col=1, min_row=min_row, max_row=max_row)
 	vBat = chart.Reference(ws2, min_col=2, min_row=min_row, max_col=2, max_row=max_row)
@@ -182,17 +178,17 @@ for i in range(0, len(graphIntervals), 2):
 	c1.append(Series(vBat, title="Battery Voltage"))
 	c1.set_categories(dates)
 	c1.y_axis.title = "Battery Voltage"
-	c1.height = 15 # default is 7.5
-	c1.width = 20 # default is 15
+	c1.height = 15
+	c1.width = 20
 	c1.y_axis.scaling.min = 10
 	c1.y_axis.scaling.max = 14500
 	c1.y_axis.crossAx = 500
 	c1.y_axis.majorGridlines = None
 
 	c2 = chart.LineChart()
-	c2.height = 15 # default is 7.5
-	c2.width = 20 # default is 15
-	c2.x_axis.axId = 500 # same as c1
+	c2.height = 15
+	c2.width = 20
+	c2.x_axis.axId = 500
 	c2.append(Series(qBat, title="Qbat Percentage"))
 	c2.set_categories(dates)
 	c2.y_axis.axId = 200
@@ -204,11 +200,11 @@ for i in range(0, len(graphIntervals), 2):
 
 	s1 = c1.series[0]
 	s1.graphicalProperties.line.solidFill = "BE4B48"
-	s1.graphicalProperties.line.width = 25000 # width in EMUs.
+	s1.graphicalProperties.line.width = 25000
 	s1.smooth = True # Make the line smooth
 	s2 = c2.series[0]
 	s2.graphicalProperties.line.solidFill = "4A7EBB"
-	s2.graphicalProperties.line.width = 25000 # width in EMUs.
+	s2.graphicalProperties.line.width = 25000
 	s2.smooth = True # Make the line smooth
 	ws2.add_chart(c1, "D%d" % (chart_row))
 
