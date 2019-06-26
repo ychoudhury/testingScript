@@ -103,7 +103,7 @@ for cell in ws1['I:I']:
 
 print("\nCreating charts...")
 
-sheet = wb['Data Analysis'] # focus on Data Analysis sheet to pull data from/write chart to    
+sheet = wb['Data Analysis'] # focus on Data Analysis sheet to pull from/write to    
 for i in range(2, sheet.max_row):
     cell = sheet.cell(row=i, column=1)
     cell.value = str(cell_to_datetime(cell))
@@ -155,6 +155,7 @@ s2.smooth = True # make the line smooth
 
 ws2.add_chart(c1, "P5") # positioning of large chart
 
+
 chart_row = 5
 
 for i in range(0, len(graphIntervals), 2):
@@ -165,23 +166,21 @@ for i in range(0, len(graphIntervals), 2):
 	if min_row == 1:
 		min_row = 2
 
-	dates = chart.Reference(ws2, min_col=1, min_row=min_row, max_row=max_row)
+	dates = chart.Reference(ws1, min_col=2, min_row=min_row, max_row=max_row)
 	vBat = chart.Reference(ws2, min_col=2, min_row=min_row, max_col=2, max_row=max_row)
 	qBat = chart.Reference(ws2, min_col=3, min_row=min_row, max_col=3, max_row=max_row)
 
 	c1 = chart.LineChart()
 	c1.title = "SLA Discharge - 5.5A: V_BAT and Q_Count"
-	c1.x_axis.majorTimeUnit = "days"
-	c1.x_axis = chart.axis.DateAxis()
+	c1.x_axis.axId = 500
 	c1.x_axis.title = "Time"
 	c1.x_axis.crosses = "min"
 	c1.x_axis.majorTickMark = "out"
-	c1.x_axis.number_format = 'd-HH-MM-SS'
 	c1.append(Series(vBat, title="Battery Voltage"))
 	c1.set_categories(dates)
-	c1.y_axis.title = "Battery Voltage"
 	c1.height = 15
 	c1.width = 20
+	c1.y_axis.title = "Battery Voltage"
 	c1.y_axis.scaling.min = 10
 	c1.y_axis.scaling.max = 14500
 	c1.y_axis.crossAx = 500
@@ -192,22 +191,21 @@ for i in range(0, len(graphIntervals), 2):
 	c2.width = 20
 	c2.x_axis.axId = 500
 	c2.append(Series(qBat, title="Qbat Percentage"))
-	c2.set_categories(dates)
 	c2.y_axis.axId = 200
 	c2.y_axis.title = "Qbat Percentage"
 	c2.y_axis.crossAx = 500
 
-	c1.y_axis.crosses = "max"
+	c1.y_axis.crosses = "max" # x axis below chart
 	c1 += c2
 
 	s1 = c1.series[0]
 	s1.graphicalProperties.line.solidFill = "BE4B48"
 	s1.graphicalProperties.line.width = 25000
-	s1.smooth = True # Make the line smooth
+	s1.smooth = True # makes the line smooth
 	s2 = c2.series[0]
 	s2.graphicalProperties.line.solidFill = "4A7EBB"
 	s2.graphicalProperties.line.width = 25000
-	s2.smooth = True # Make the line smooth
+	s2.smooth = True # makes the line smooth
 	ws2.add_chart(c1, "D%d" % (chart_row))
 
 	chart_row += 30
