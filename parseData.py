@@ -1,16 +1,9 @@
-#TODO: File location naming
-#TODO: Sheet naming
-
-import os
 import re
 import openpyxl
 from openpyxl import Workbook, chart
 from openpyxl.chart import LineChart, Reference, Series
 from openpyxl.chart.axis import DateAxis
 from datetime import date, datetime, timedelta, time
-
-# enter correct filepath for project here
-os.chdir('C:\\Users\yasirc\Desktop\parseData')
 
 # enter correct filename here
 wb = openpyxl.load_workbook('ngt_log.xlsx')
