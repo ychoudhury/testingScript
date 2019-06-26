@@ -102,12 +102,14 @@ for cell in ws1['I:I']:
     ws2.cell(row = cell.row, column = 3, value = cell.value)
 
 print("\nCreating charts...")
+
 sheet = wb['Data Analysis'] # focus on Data Analysis sheet to pull data from/write chart to    
 for i in range(2, sheet.max_row):
     cell = sheet.cell(row=i, column=1)
     cell.value = str(cell_to_datetime(cell))
-
-dates = chart.Reference(ws2, min_col=1, min_row=2, max_row=sheet.max_row)
+    
+ws1['B2'] = '0:00:00'
+dates = chart.Reference(ws1, min_col=2, min_row=2, max_row=sheet.max_row)
 vBat = chart.Reference(ws2, min_col=2, min_row=1, max_col=2, max_row=sheet.max_row)
 qBat = chart.Reference(ws2, min_col=3, min_row=1, max_col=3, max_row=sheet.max_row)
 c1 = chart.LineChart()
