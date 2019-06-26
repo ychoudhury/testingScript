@@ -1,6 +1,5 @@
 #TODO: File location naming
 #TODO: Sheet naming
-#TODO: Graphs for each cycle
 
 import os
 import re
@@ -50,12 +49,11 @@ def cell_to_datetime(cell):
     return adjusted_datetime
 
 # first value added to array for time calculation purposes
-graphIntervals.append(sheet.cell(row=2, column=1).value)
 cycleTimes.append(cell_to_datetime(sheet.cell(row=2, column=2)))
 coulCount.append(sheet.cell(row=2, column=8).value)
+graphIntervals.append(sheet.cell(row=2, column=1).value)
 
 # finds when battery current changes from + to -/- to +
-print("ROW | VALUE")
 for i in range(2, sheet.max_row):
     current = sheet.cell(row=i, column=6).value
     next =  sheet.cell(row=i+1, column=6).value
@@ -66,7 +64,6 @@ for i in range(2, sheet.max_row):
         coulCount.append(sheet.cell(row=(i+1), column=8).value)
         graphIntervals.append(sheet.cell(row=i, column=1).value)
         graphIntervals.append(sheet.cell(row=(i+1), column=1).value)
-        print(i+1, next)
 
 print("\nCYCLE CHANGE TIMES")        
 cycleTimes.append(cell_to_datetime(sheet.cell(row=sheet.max_row, column=2)))
@@ -94,10 +91,10 @@ for i in capChange:
 
 graphIntervals.append(sheet.cell(row=sheet.max_row, column=1).value)
 
-# Chart creation
-wb.create_sheet('sheet2') # New sheet created for data analysis
+# chart creation
+wb.create_sheet('Data Analysis') # new sheet created for data analysis
 ws1 = wb['sheet1']
-ws2 = wb['sheet2']
+ws2 = wb['Data Analysis']
 for cell in ws1['B:B']:
     ws2.cell(row = cell.row, column = 1, value = cell.value)
 for cell in ws1['D:D']:
@@ -105,11 +102,57 @@ for cell in ws1['D:D']:
 for cell in ws1['I:I']:
     ws2.cell(row = cell.row, column = 3, value = cell.value)
 
-sheet = wb['sheet2'] # focus on sheet2 to pull data from/write chart to    
-print('Creating charts...')
+print("\nCreating charts...")
+sheet = wb['Data Analysis'] # focus on Data Analysis sheet to pull data from/write chart to    
 for i in range(2, sheet.max_row):
     cell = sheet.cell(row=i, column=1)
     cell.value = str(cell_to_datetime(cell))
+
+dates = chart.Reference(ws2, min_col=1, min_row=2, max_row=sheet.max_row)
+vBat = chart.Reference(ws2, min_col=2, min_row=1, max_col=2, max_row=sheet.max_row)
+qBat = chart.Reference(ws2, min_col=3, min_row=1, max_col=3, max_row=sheet.max_row)
+c1 = chart.LineChart()
+c1.title = "SLA Discharge - 5.5A: V_BAT and Q_Count"
+c1.height = 10 # chart dimensions
+c1.width = 20 
+c1.x_axis.majorTimeUnit = "days"
+c1.x_axis = chart.axis.DateAxis()
+c1.x_axis.title = "Time"
+c1.x_axis.crosses = "min"
+c1.x_axis.majorTickMark = "out"
+c1.x_axis.number_format = 'd-HH-MM-SS'
+c1.add_data(vBat, titles_from_data=True)
+c1.set_categories(dates)
+c1.y_axis.title = "Battery Voltage"
+c1.y_axis.scaling.min = 10
+c1.y_axis.scaling.max = 14500
+c1.y_axis.crossAx = 500
+c1.y_axis.majorGridlines = None
+
+c2 = chart.LineChart()
+c2.height = 10 # chart dimensions
+c2.width = 20
+c2.x_axis.axId = 500
+c2.add_data(qBat, titles_from_data=True)
+c2.y_axis.axId = 200
+c2.y_axis.title = "Qbat Percentage"
+c2.y_axis.crossAx = 500
+
+c1.y_axis.crosses = "max"
+c1 += c2
+
+# Line styling
+s1 = c1.series[0]
+s1.graphicalProperties.line.solidFill = "BE4B48"
+s1.graphicalProperties.line.width = 25000 # width in EMUs.
+s1.smooth = True # make the line smooth
+s2 = c2.series[0]
+s2.graphicalProperties.line.solidFill = "4A7EBB"
+s2.graphicalProperties.line.width = 25000 # width in EMUs.
+s2.smooth = True # make the line smooth
+
+
+ws2.add_chart(c1, "P5")
 
 chart_row = 5
 
@@ -139,10 +182,16 @@ for i in range(0, len(graphIntervals), 2):
 	c1.append(Series(vBat, title="Battery Voltage"))
 	c1.set_categories(dates)
 	c1.y_axis.title = "Battery Voltage"
+	c1.height = 15 # default is 7.5
+	c1.width = 20 # default is 15
+	c1.y_axis.scaling.min = 10
+	c1.y_axis.scaling.max = 14500
 	c1.y_axis.crossAx = 500
 	c1.y_axis.majorGridlines = None
 
 	c2 = chart.LineChart()
+	c2.height = 15 # default is 7.5
+	c2.width = 20 # default is 15
 	c2.x_axis.axId = 500 # same as c1
 	c2.append(Series(qBat, title="Qbat Percentage"))
 	c2.set_categories(dates)
@@ -158,11 +207,11 @@ for i in range(0, len(graphIntervals), 2):
 	s1.graphicalProperties.line.width = 25000 # width in EMUs.
 	s1.smooth = True # Make the line smooth
 	s2 = c2.series[0]
-	s2.graphicalProperties.line.solidFill = "48BBBE"
+	s2.graphicalProperties.line.solidFill = "4A7EBB"
 	s2.graphicalProperties.line.width = 25000 # width in EMUs.
 	s2.smooth = True # Make the line smooth
 	ws2.add_chart(c1, "D%d" % (chart_row))
 
-	chart_row += 15
+	chart_row += 30
 
 wb.save('ngt_log.xlsx')
