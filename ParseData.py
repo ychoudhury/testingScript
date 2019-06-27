@@ -73,7 +73,7 @@ for i in range(2, sheet.max_row):
         graphIntervals.append(sheet.cell(row=i, column=1).value)
         graphIntervals.append(sheet.cell(row=(i+1), column=1).value)
 
-print("\nCYCLE CHANGE TIMES")        
+print("CYCLE CHANGE TIMES")        
 cycleTimes.append(cell_to_datetime(sheet.cell(row=sheet.max_row, column=2)))
 for i in cycleTimes:
     print(i)
@@ -109,8 +109,6 @@ for cell in ws1['D:D']:
     ws2.cell(row = cell.row, column = 2, value = cell.value)
 for cell in ws1['I:I']:
     ws2.cell(row = cell.row, column = 3, value = cell.value)
-
-print("\nCreating charts...")
 
 sheet = wb['Data Analysis'] # focus on Data Analysis sheet to pull from/write to    
 for i in range(2, sheet.max_row):
