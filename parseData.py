@@ -1,14 +1,11 @@
-'''
-6/27/19
-Y. Choudhury, supervisor A. Lewin
-This program finds key information from the data generated from NGT battery testing.
-The log generated in "log.txt" displays the following:
-start and end times for each section and total elapsed time for each
-start and end Coulomb count (Col H) as well as capacity change
-This program relies on a few assumptions:
-In "sheet1", Time is Column B, Battery Voltage is Column D and Qbat Percentage is Column I
-
-'''
+###### 6/27/19
+###### Y. Choudhury, supervisor A. Lewin
+###### This program finds key information from the data generated from NGT battery testing.
+###### The log generated in "log.txt" displays the following:
+###### start and end times for each section and total elapsed time for each
+###### start and end Coulomb count (Col H) as well as capacity change
+###### This program relies on a few assumptions:
+###### In "sheet1", Time is Column B, Battery Voltage is Column D and Qbat Percentage is Column I
 
 import openpyxl
 import re
