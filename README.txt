@@ -1,8 +1,8 @@
 QUICK START GUIDE
 
 DEPENDENCIES:
-Python 3.x
-pip package manager
+	Python 3.x
+	pip package manager
 
 pip packages:
 	openpyxl
