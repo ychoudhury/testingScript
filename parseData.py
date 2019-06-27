@@ -1,5 +1,6 @@
-import re
 import openpyxl
+import re
+import sys
 from openpyxl import Workbook, chart
 from openpyxl.chart import LineChart, Reference, Series
 from openpyxl.chart.axis import DateAxis
@@ -17,6 +18,10 @@ capChange = []
 dateTimes = []
 timeDeltas = []
 graphIntervals = []
+
+# redirects console output to log.txt
+stdoutOrigin=sys.stdout 
+sys.stdout = open("log.txt", "w")
 
 # RegEx to convert times in column B to a consistent format
 def cell_to_datetime(cell):
@@ -202,5 +207,10 @@ for i in range(0, len(graphIntervals), 2):
 	ws2.add_chart(c1, "D%d" % (chart_row))
 
 	chart_row += 30
+
+
+# finishes redirection of console output to log.txt
+sys.stdout.close()
+sys.stdout=stdoutOrigin
 
 wb.save('ngt_log.xlsx')
