@@ -33,8 +33,3 @@ USAGE:
 3. Verify that ngt_log.xlsx and parseData.py are in the same folder
 4. Double click script to run. Script window will close by itself when finished.
 5. Graphs will be located in the "Data Analysis" sheet of ngt_log and data will be located in "log.txt"
-
-
-
-
-
