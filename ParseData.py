@@ -132,7 +132,7 @@ c1.x_axis.number_format = 'd-HH-MM-SS'
 c1.add_data(vBat, titles_from_data=True)
 c1.set_categories(dates)
 c1.y_axis.title = "Battery Voltage"
-c1.y_axis.scaling.min = 10
+c1.y_axis.scaling.min = 10000
 c1.y_axis.scaling.max = 14500
 c1.y_axis.crossAx = 500
 c1.y_axis.majorGridlines = None
@@ -189,7 +189,7 @@ for i in range(0, len(graphIntervals), 2):
 	c1.height = 15
 	c1.width = 20
 	c1.y_axis.title = "Battery Voltage"
-	c1.y_axis.scaling.min = 10
+	c1.y_axis.scaling.min = 10000
 	c1.y_axis.scaling.max = 14500
 	c1.y_axis.crossAx = 500
 	c1.y_axis.majorGridlines = None
