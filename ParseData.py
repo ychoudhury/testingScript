@@ -164,6 +164,7 @@ ws2.add_chart(c1, "P5") # positioning of large chart
 
 
 chart_row = 5
+chart_number = 1
 
 for i in range(0, len(graphIntervals), 2):
 	min_row = graphIntervals[i] + 1
@@ -178,7 +179,7 @@ for i in range(0, len(graphIntervals), 2):
 	qBat = chart.Reference(ws2, min_col=3, min_row=min_row, max_col=3, max_row=max_row)
 
 	c1 = chart.LineChart()
-	c1.title = "SLA Discharge - 5.5A: V_BAT and Q_Count"
+	c1.title = "SLA Discharge - 5.5A: V_BAT and Q_Count %d" % (chart_number)
 	c1.x_axis.axId = 500
 	c1.x_axis.title = "Time"
 	c1.x_axis.crosses = "min"
@@ -216,6 +217,7 @@ for i in range(0, len(graphIntervals), 2):
 	ws2.add_chart(c1, "D%d" % (chart_row))
 
 	chart_row += 30
+	chart_number += 1
 
 
 # finishes redirection of console output to log.txt
