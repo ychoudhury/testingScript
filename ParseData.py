@@ -1,5 +1,5 @@
 ###### 6/27/19
-###### Y. Choudhury, supervisor A. Lewin
+###### Y. Choudhury, supervisor [REDACTED]
 ###### This program finds key information from the data generated from
 ###### NGT battery testing.
 ###### The log generated in "log.txt" displays the following:
